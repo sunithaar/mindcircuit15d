@@ -5,8 +5,17 @@ pipeline {
     stages {
         stage('clone') {
             steps {
-                git branch: 'main', url: 'https://github.com/sunithaar/mindcircuit15d.git'
+               script{
+			try{
+			git branch: 'main', url: 'https://github.com/sunithaar/mindcircuit15d.git'
                 echo 'cloning the project'
+			}
+			catch(exception e){
+			echo "stage 1 failed: $(e.message)"}
+			
+			}
+                
+            }
             }
         }
         stage('build'){

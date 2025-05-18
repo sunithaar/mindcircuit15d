@@ -1,0 +1,25 @@
+pipeline {
+    agent {
+  label 'slave'
+}
+    stages {
+        stage('clone') {
+            steps {
+                git branch: 'main', url: 'https://github.com/sunithaar/mindcircuit15d.git'
+                echo 'cloning the project'
+            }
+        }
+        stage('build'){
+            steps{
+                sh 'mvn clean install'
+                echo 'build the project'
+            }
+        }
+        stage('deploy'){
+            steps{
+                deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: 'tomcatid', path: '', url: 'http://ec2-54-210-16-14.compute-1.amazonaws.com:8090/')], contextPath: 'pipeline', war: '**/*.war'
+                echo 'deploy the project'
+            }
+        }
+    }
+}
